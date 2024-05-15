@@ -1,0 +1,23 @@
+name: trial-app
+
+on:
+  push:
+    branches:
+        - dev
+    tags:
+        - '*'
+
+env:
+    IMAGE_NAME: ghcr.io/${{github.repository_owner}}/trial-app
+    IMAGE_ID: container_image
+    APP_VERSION: 0.0.0
+
+jobs:
+   build-image:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build the Dcoker image
+        run: docker build . --file Dockerfile -t "${{env.IMAGE_NAME}}:${{github.ref}}
