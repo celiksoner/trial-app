@@ -1,13 +1,30 @@
 from flask import Flask, jsonify,request
 from common import send_slack_notif
+from common import authenticate
+from common import require_token
 
 app = Flask(__name__)
+
+
+@app.route('/api/generate-token', methods=['POST'])
+def get_auth_token():
+    auth = request.get_json()
+    username = auth.get('username', None)
+    password = auth.get('password', None)
+
+    if not username or not password or not authenticate.check_user(username, password):
+        return jsonify({'Error': 'Username or password does not match!'}), 401
+    
+    token = authenticate.check_user(username,password)
+    return jsonify({'Token': token}), 200
+
 
 @app.route('/api/health', methods=['GET'])
 def get_health():
     return 'Application is running..', 200
 
 @app.route('/api/slack', methods=['POST'])
+@require_token.check_token
 def post_slack_notif():
     req_data = request.get_json()
     if 'webhook_url' not in req_data or 'message' not in req_data:
