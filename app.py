@@ -6,7 +6,7 @@ from common import require_token
 app = Flask(__name__)
 
 
-@app.route('/api/generate-token', methods=['POST'])
+@app.route('/api/get-token', methods=['POST'])
 def get_auth_token():
     auth = request.get_json()
     username = auth.get('username', None)
