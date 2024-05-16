@@ -30,6 +30,10 @@ def get_auth_token():
     token = authenticate.check_user(username,password)
     return jsonify({'Token': token}), 200
 
+@app.route('/api/sentry-test', methods=['GET'])
+def throw_exception():
+    1/0
+    return 'Error log test.'
 
 @app.route('/api/health', methods=['GET'])
 def get_health():
