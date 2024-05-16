@@ -15,9 +15,10 @@ sentry_sdk.init(
 app = Flask(__name__)
 
 @app.route('/api/github/<int:pr_id>', methods=['POST'])
+@require_token.check_token
 def pr_merge(pr_id):
     headers = {
-        "Authorization": f"token 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"
+        "Authorization": f"token <token>"
     }
     url = f"https://api.github.com/repos/celiksoner/trial-app/pulls/{pr_id}/merge"
 
@@ -41,6 +42,7 @@ def get_auth_token():
     return jsonify({'Token': token}), 200
 
 @app.route('/api/sentry-test', methods=['GET'])
+@require_token.check_token
 def throw_exception():
     1/0
     return 'Error log test.'
