@@ -17,16 +17,15 @@ app = Flask(__name__)
 @app.route('/api/github/<int:pr_id>', methods=['POST'])
 def pr_merge(pr_id):
     headers = {
-        'Authorization': f'token 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',
-        'Accept': 'application/vnd.github.v3+json'
+        "Authorization": f"token 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"
     }
-    url = f'https://api.github.com/repos/celiksoner/trial-app/pulls/{pr_id}/merge'
+    url = f"https://api.github.com/repos/celiksoner/trial-app/pulls/{pr_id}/merge"
 
-    response = requests.post(url, headers=headers)
+    response = requests.put(url, headers=headers)
     if response.status_code == 200:
-        return jsonify({"message": f"PR {pr_id} başarıyla onaylandı!"}), 200
+        return jsonify({"message": f"PR {pr_id} merge successfully!"}), 200
     else:
-        return jsonify({"error": f"PR {pr_id} onaylanamadı. Status code: {response.status_code}"}), 500
+        return jsonify({"error": f"PR {pr_id} merge failed. Status code: {response.status_code}"}), 500
 
 
 @app.route('/api/get-token', methods=['POST'])
