@@ -66,19 +66,3 @@ def post_slack_notif():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-# @app.route('/api/github', methods=['GET'])
-# def approve_pull_request():
-#     headers = {
-#         'Authorization': f'token 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',
-#         'Accept': 'application/vnd.github.v3+json'
-#     }
-#     url = f'https://api.github.com/repos/celiksoner/trial-app/pulls/1/merge'
-#     response = requests.put(url, headers=headers)
-
-#     if response.status_code == 200:
-#         print("PR başarıyla birleştirildi!")
-#     else:
-#         print("PR birleştirilemedi.")
