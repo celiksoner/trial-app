@@ -66,8 +66,3 @@ def post_slack_notif():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-#     if response.status_code == 200:
-#         print("PR başarıyla birleştirildi!")
-#     else:
-#         print("PR birleştirilemedi.")
