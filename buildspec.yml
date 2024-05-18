@@ -1,0 +1,34 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+    - echo Logging in to Amazon ECR...
+    - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 867989196956.dkr.ecr.eu-central-1.amazonaws.com
+  build:
+    commands:
+    - echo Build started on `date`
+    - echo Building the Docker image...
+    - docker build -t trial-app:dev .
+    - docker tag trial-app:dev 867989196956.dkr.ecr.eu-central-1.amazonaws.com/trial-app:dev
+  post_build:
+    commands:
+    - echo Build completed on `date`
+    - echo Pushing the Docker image...
+    - docker push 867989196956.dkr.ecr.eu-central-1.amazonaws.com/trial-app:dev
+    - echo Writing image definitions file...
+    - printf '[{"name":"trialapp","imageUri":"%s"}]'    $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+    - cat imagedefinitions.json
+
+artifacts:
+  files: imagedefinitions.json
+
+unit_tests:
+  commands:
+  - echo Running unit tests...
+  - python -m unittest tests/test_send_slack_notif.py
+
+  finally:
+  - echo Checking unit test results...
+  - test -f test-reports/TEST-*.xml || exit 1
+  - echo Unit tests passed successfully
